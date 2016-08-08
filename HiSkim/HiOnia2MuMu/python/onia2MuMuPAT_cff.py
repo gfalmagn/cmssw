@@ -2,7 +2,7 @@ import FWCore.ParameterSet.Config as cms
 
 from PhysicsTools.PatAlgos.tools.helpers import *
 
-def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True):
+def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True, useL1Stage2=False):
     # Setup the process
     process.options = cms.untracked.PSet(
         wantSummary = cms.untracked.bool(True),
@@ -27,7 +27,8 @@ def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True):
 
     # Make PAT Muons
     process.load("MuonAnalysis.MuonAssociators.patMuonsWithTrigger_cff")
-    from MuonAnalysis.MuonAssociators.patMuonsWithTrigger_cff import addMCinfo, useL1MatchingWindowForSinglets, changeTriggerProcessName, switchOffAmbiguityResolution, addHLTL1Passthrough
+    from MuonAnalysis.MuonAssociators.patMuonsWithTrigger_cff import addMCinfo, useL1MatchingWindowForSinglets, changeTriggerProcessName, switchOffAmbiguityResolution, addHLTL1Passthrough, useL1Stage2Candidates
+
     # with some customization
     if MC:
         addMCinfo(process)
@@ -38,10 +39,13 @@ def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True):
     changeTriggerProcessName(process, HLT)
     switchOffAmbiguityResolution(process) # Switch off ambiguity resolution: allow multiple reco muons to match to the same trigger muon
     addHLTL1Passthrough(process)
-    #useL1MatchingWindowForSinglets(process)
-
-    process.patTrigger.collections.append("hltGmtStage2Digis:Muon")
+    
+    if useL1Stage2:
+        useL1Stage2Candidates(process)
+        process.patTrigger.collections.append("hltGmtStage2Digis:Muon")
+        process.muonMatchHLTL1.matchedCuts = cms.string('coll("hltGmtStage2Digis:Muon")')
    
+
     process.muonL1Info.maxDeltaR = 0.3
     process.muonL1Info.fallbackToME1 = True
     process.muonMatchHLTL1.maxDeltaR = 0.3
@@ -50,17 +54,11 @@ def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True):
     process.muonMatchHLTL2.maxDPtRel = 10.0
     process.muonMatchHLTL3.maxDeltaR = 0.1
     process.muonMatchHLTL3.maxDPtRel = 10.0
-    process.muonMatchHLTL1.matchedCuts = cms.string('coll("hltGmtStage2Digis:Muon")')
-    process.muonMatchHLTL3.matchedCuts = cms.string('coll("hltL3MuonCandidates")')
-
-    process.patTrigger.collections.append("hltL1extraParticles")
-    process.muonMatchHLTL1T = process.muonMatchL1.clone(matchedCuts = cms.string('coll("hltL1extraParticles")'))
-    process.muonMatchHLTL1T.maxDeltaR = 0.3
-    process.muonMatchHLTL1T.fallbackToME1 = True
-    process.patMuonsWithTriggerSequence.replace(process.muonMatchHLTL1, process.muonMatchHLTL1 + process.muonMatchHLTL1T)
-    getattr(process,"patMuonsWithTrigger").matches += [ cms.InputTag('muonMatchHLTL1T'), cms.InputTag('muonMatchHLTL1T','propagatedReco') ]
-    process.muonMatchHLTL1T.resolveAmbiguities = False
-
+    process.muonMatchHLTCtfTrack.maxDeltaR = 0.1
+    process.muonMatchHLTCtfTrack.maxDPtRel = 10.0
+    process.muonMatchHLTTrackMu.maxDeltaR = 0.1
+    process.muonMatchHLTTrackMu.maxDPtRel = 10.0
+    
     process.patTrigger.collections.append("hltHIL3MuonCandidates") 
     process.muonMatchHLTL3T.maxDeltaR = 0.1
     process.muonMatchHLTL3T.maxDPtRel = 10.0
