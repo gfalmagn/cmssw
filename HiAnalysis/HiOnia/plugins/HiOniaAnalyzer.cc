@@ -1563,7 +1563,7 @@ HiOniaAnalyzer::fillGenInfo()
         it!=collGenParticles->end();++it) {
       const reco::GenParticle* gen = &(*it);
       
-      if (abs(gen->pdgId()) == _oniaPDG  && (gen->status() == 2 || gen->status() == 62)  &&
+      if (abs(gen->pdgId()) == _oniaPDG  && (gen->status() == 2 || (abs(gen->pdgId())==23 && gen->status() == 62))  &&
           gen->numberOfDaughters() >= 2) {
 
         reco::GenParticleRef genMuon1 = findDaughterRef(gen->daughterRef(0), gen->pdgId());
