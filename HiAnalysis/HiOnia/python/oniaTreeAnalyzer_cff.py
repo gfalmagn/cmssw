@@ -7,11 +7,11 @@ def oniaTreeAnalyzer(process, HLTProName='HLT', muonSelection="Trk", useL1Stage2
     process.MessageLogger.categories.extend(["HiOnia2MuMuPAT_muonLessSizeORpvTrkSize"])
     process.MessageLogger.cerr.HiOnia2MuMuPAT_muonLessSizeORpvTrkSize = cms.untracked.PSet( limit = cms.untracked.int32(5) )
     
+    process.load('SimGeneral.HepPDTESSource.pythiapdt_cfi')
+    # load the Modules for the PATMuonsWithTrigger
+    process.load('RecoMuon.Configuration.RecoMuon_cff')
+    process.load('RecoTracker.Configuration.RecoTracker_cff')
     # load the Modules for the TransientTrackBuilder
-    process.load('Configuration.StandardSequences.Services_cff')
-    #process.load('Configuration.Geometry.GeometryExtended2016Reco_cff')
-    #process.load('Configuration.StandardSequences.MagneticField_cff')
-    process.load('Configuration.StandardSequences.Reconstruction_cff')
     process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 
 ###################### Onia Skim Producer #################################################
