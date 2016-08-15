@@ -10,11 +10,13 @@ def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True, useL1Stag
     )
      
     # Drop the DQM stuff on input
-    process.source = cms.Source("PoolSource",
-        inputCommands = cms.untracked.vstring("keep *", 
-                                              "drop *_MEtoEDMConverter_*_*"),
-        fileNames = cms.untracked.vstring()
-    )
+    if hasattr(process, "source") and hasattr(process.source, "inputCommands"): 
+        process.source.inputCommands = cms.untracked.vstring("keep *", "drop *_MEtoEDMConverter_*_*")
+    else:
+        process.source = cms.Source("PoolSource",
+                                    inputCommands = cms.untracked.vstring("keep *", "drop *_MEtoEDMConverter_*_*"),
+                                    fileNames = cms.untracked.vstring()
+                                    )
 
     # Prune generated particles to muons and their parents
     process.genMuons = cms.EDProducer("GenParticlePruner",
@@ -44,7 +46,9 @@ def onia2MuMuPAT(process, GlobalTag, MC=False, HLT='HLT', Filter=True, useL1Stag
         useL1Stage2Candidates(process)
         process.patTrigger.collections.append("hltGmtStage2Digis:Muon")
         process.muonMatchHLTL1.matchedCuts = cms.string('coll("hltGmtStage2Digis:Muon")')
-   
+        process.muonMatchHLTL1.useMB2InOverlap = cms.bool(True)
+        process.muonMatchHLTL1.useStage2L1 = cms.bool(True)
+        process.muonMatchHLTL1.preselection = cms.string("")
 
     process.muonL1Info.maxDeltaR = 0.3
     process.muonL1Info.fallbackToME1 = True

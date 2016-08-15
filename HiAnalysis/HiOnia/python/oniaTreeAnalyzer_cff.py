@@ -6,14 +6,13 @@ def oniaTreeAnalyzer(process, HLTProName='HLT', muonSelection="Trk", useL1Stage2
 
     process.MessageLogger.categories.extend(["HiOnia2MuMuPAT_muonLessSizeORpvTrkSize"])
     process.MessageLogger.cerr.HiOnia2MuMuPAT_muonLessSizeORpvTrkSize = cms.untracked.PSet( limit = cms.untracked.int32(5) )
-    process.options = cms.untracked.PSet(wantSummary = cms.untracked.bool(True))
     
-    # load the Geometry and Magnetic Field for the TransientTrackBuilder
+    # load the Modules for the TransientTrackBuilder
     process.load('Configuration.StandardSequences.Services_cff')
-    process.load('Configuration.Geometry.GeometryExtended2016Reco_cff')
-    process.load('Configuration.StandardSequences.MagneticField_cff')
+    #process.load('Configuration.Geometry.GeometryExtended2016Reco_cff')
+    #process.load('Configuration.StandardSequences.MagneticField_cff')
     process.load('Configuration.StandardSequences.Reconstruction_cff')
-    process.load("TrackingTools/TransientTrack/TransientTrackBuilder_cfi")
+    process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 
 ###################### Onia Skim Producer #################################################
 
@@ -221,5 +220,4 @@ def oniaTreeAnalyzer(process, HLTProName='HLT', muonSelection="Trk", useL1Stage2
     process.hionia.CentralityBinSrc = cms.InputTag("")
     process.hionia.srcTracks        = cms.InputTag("generalTracks")       
 
-    process.oniaTree = cms.Path(process.hionia)
-
+    process.oniaTreeAna = cms.EndPath(process.patMuonSequence * process.onia2MuMuPatGlbGlb * process.hionia )
