@@ -385,7 +385,7 @@ hltObjectMonitor = cms.EDAnalyzer('HLTObjectMonitor',
         Xmax = cms.double(160)
         ),
     pAL1DoubleMuZMass = cms.PSet(
-        pathName = cms.string("HLT_PAL1DoubleMu10"),
+        pathName = cms.string("HLT_PAL3DoubleMu10"),
         moduleName = cms.string("hltL1fL1sDoubleMu10BptxANDL1Filtered0"),
         plotLabel = cms.string("PAL1DoubleMu10_ZMass"),
         axisLabel = cms.string("dimuon mass [GeV]"),
@@ -395,7 +395,7 @@ hltObjectMonitor = cms.EDAnalyzer('HLTObjectMonitor',
         Xmax = cms.double(160.0)
         ),
     pAL2DoubleMuZMass = cms.PSet(
-        pathName = cms.string("HLT_PAL2DoubleMu10"),
+        pathName = cms.string("HLT_PAL3DoubleMu10"),
         moduleName = cms.string("hltL2fL1sDoubleMu10BptxANDL1f0L2Filtered10"),
         plotLabel = cms.string("PAL2DoubleMu10_ZMass"),
         axisLabel = cms.string("dimuon mass [GeV]"),
