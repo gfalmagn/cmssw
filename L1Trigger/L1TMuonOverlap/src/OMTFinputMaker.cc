@@ -288,7 +288,7 @@ OMTFinput OMTFinputMaker::processCSC(const CSCCorrelatedLCTDigiCollection *cscDi
       ///The nominal OMTF range is up to 1.24, but cutting at 1.24
       ///kill efficnency at the edge. 1.26 is one eta bin above nominal.
       //if(abs(iEta)>1.26/2.61*240) continue;
-      if (abs(iEta) > 115) continue;
+      //if (abs(iEta) > 115) continue;
       unsigned int iInput= getInputNumber(rawid, iProcessor, type);      
 //    std::cout <<" ADDING CSC hit, proc: "<<iProcessor<<" iPhi : " << iPhi <<" iEta: "<< iEta << std::endl; 
       result.addLayerHit(iLayer,iInput,iPhi,iEta);     
